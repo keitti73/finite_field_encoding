@@ -1,0 +1,8 @@
+[package]
+name = "finite_field_encoding"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+field_element = { path = "./field_element" }
+rug = "1.17.0"
