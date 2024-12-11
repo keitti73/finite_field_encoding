@@ -10,15 +10,10 @@ fn main() {
     // ランダムなサンプルデータを生成
     let sample: Array1<FieldElement<i32>> = Array::random(5, Uniform::new(0, 255)).mapv(|x| FieldElement::new(x, 256));
     println!("Original sample: {:?}", sample);
-    let sample_vec: Vec<FieldElement<i32>> = sample.to_vec();
-    println!("Sample as Vec: {:?}", sample_vec);
 
     // ランダムな行列を生成
     let random_matrix: Array2<i32> = Array::random((1, 5), Uniform::new(0, 255)).mapv(|x| x);
     println!("Random matrix: {:?}", random_matrix);
-    let random_matrix_vec: Vec<i32> = random_matrix.iter().map(|&x| x).collect();
-    println!("Random matrix: as Vec: {:?}", random_matrix_vec);
-
     // 符号化
     let encoded_sample = &sample*&random_matrix;
     println!("Encoded sample: {:?}", encoded_sample);
