@@ -51,28 +51,28 @@ fn gaussian_elimination(a: &Array2<FieldElement<i128>>, b: &Array1<FieldElement<
         }
         // 手動で行を入れ替える
         for j in 0..a.ncols() {
-            a.swap([i, j], [max_row, j]);
+            a.swap([i, j], [max_row, j]); // 行iとmax_rowの要素を入れ替える
         }
-        b.swap(i, max_row);
+        b.swap(i, max_row); // ベクトルbの要素も同様に入れ替える
 
         for k in (i + 1)..n {
-            let factor = a[[k, i]].clone() / a[[i, i]].clone();
+            let factor = a[[k, i]].clone() / a[[i, i]].clone(); // ピボット行の要素で割ることで係数を計算
             for j in i..n {
-                a[[k, j]] = a[[k, j]].clone() - factor.clone() * a[[i, j]].clone();
+                a[[k, j]] = a[[k, j]].clone() - factor.clone() * a[[i, j]].clone(); // 行kから係数倍の行iを引く
             }
-            b[k] = b[k].clone() - factor * b[i].clone();
+            b[k] = b[k].clone() - factor * b[i].clone(); // ベクトルbも同様に更新
         }
     }
 
-    let mut x: Array1<FieldElement<i128>> = Array1::from_elem(n, FieldElement::new(0, a[[0, 0]].prime));
+    let mut x: Array1<FieldElement<i128>> = Array1::from_elem(n, FieldElement::new(0, a[[0, 0]].prime)); // 解ベクトルxを初期化
     for i in (0..n).rev() {
-        let mut sum = FieldElement::new(0, a[[i, i]].prime);
+        let mut sum = FieldElement::new(0, a[[i, i]].prime); // sumを初期化
         for j in (i + 1)..n {
-            sum = sum + a[[i, j]].clone() * x[j].clone();
+            sum = sum + a[[i, j]].clone() * x[j].clone(); // 既に求めた解��使ってsumを計算
         }
-        x[i] = (b[i].clone() - sum) / a[[i, i]].clone();
+        x[i] = (b[i].clone() - sum) / a[[i, i]].clone(); // 解を計算してxに代入
     }
 
-    x
+    x // 解ベクトルを返す
 }
 
