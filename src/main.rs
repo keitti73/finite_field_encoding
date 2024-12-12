@@ -37,6 +37,8 @@ fn main() {
     println!("random_matrix_1: {:?}", random_matrix);
     let random_matrix_inv = random_matrix.inv().expect("Matrix inversion failed");
     let x_vec = random_matrix_inv.dot(&sum_matrix);
+
+    println!("Decoded sample: {:?}", x_vec);
 }
 // https://github.com/shinbunbun/secp256k1-rust
 // field_elementは上記のコードの一部をお借りしま・・

@@ -5,7 +5,7 @@ edition = "2021"
 
 [dependencies]
 field_element = { path = "./field_element" }
-rand = "0.8"
-ndarray = "0.16.1"
-ndarray-linalg = "0.16.0"
-ndarray-rand = "0.15.0"
+rand = "0.7"
+ndarray = "0.13.0"
+ndarray-linalg = "0.12.0"
+ndarray-rand = "0.11.0"
