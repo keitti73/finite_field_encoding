@@ -6,6 +6,6 @@ edition = "2021"
 [dependencies]
 field_element = { path = "./field_element" }
 rand = "0.8"
-ndarray = "0.16"
-ndarray-linalg = { version = "0.16.0", features = ["openblas-static"] }
-ndarray-rand = "0.15"
+ndarray = "0.16.1"
+ndarray-linalg = "0.16.0"
+ndarray-rand = "0.15.0"
