@@ -7,6 +7,16 @@ struct Encoded {
     random_matrix: Array1<FieldElement<i128>>,
     value: FieldElement<i128>,
 }
+impl Encoded {
+    fn new(random_matrix: Array1<FieldElement<i128>>, sample:Array1<FieldElement<i128>>,prime: i128) -> Self {
+        let encoded_sample = &sample * &random_matrix;
+        let sum_closure = |arr: &Array1<FieldElement<i128>>| -> FieldElement<i128> {
+            arr.iter().fold(FieldElement::new(0, prime), |acc, x| acc + x.clone())
+        };
+        let sum = sum_closure(&encoded_sample);
+        return Encoded { random_matrix:random_matrix, value: sum, };
+    }
+}
 
 fn main() {
     let prime = (2_u32.pow(31) - 1) as i128;
@@ -90,12 +100,12 @@ fn encoding(sample: &Array1<FieldElement<i128>>, prime: i128) -> Encoded {
     let prime = prime.clone();
     let sample = sample.clone();
     let random_matrix: Array1<FieldElement<i128>> = Array::random(5, Uniform::new(0, 255)).mapv(|x| FieldElement::new(x, prime));
-    let encoded_sample = &sample * &random_matrix;
-    let sum_closure = |arr: &Array1<FieldElement<i128>>| -> FieldElement<i128> {
-        arr.iter().fold(FieldElement::new(0, prime), |acc, x| acc + x.clone())
-    };
-    let sum = sum_closure(&encoded_sample);
-    return Encoded{random_matrix, value:sum};
+    //let encoded_sample = &sample * &random_matrix;
+    //let sum_closure = |arr: &Array1<FieldElement<i128>>| -> FieldElement<i128> {
+    //    arr.iter().fold(FieldElement::new(0, prime), |acc, x| acc + x.clone())
+    //};
+    //let sum = sum_closure(&encoded_sample);
+    return Encoded::new(random_matrix, sample, prime);
 }
 
 fn decoding(sum_matrix:&Vec<FieldElement<i128>>,random_matrix_tmp:&Vec<Vec<FieldElement<i128>>>) -> Array1<FieldElement<i128>> {
