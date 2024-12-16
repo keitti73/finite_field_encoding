@@ -2,6 +2,7 @@ pub use field_element::FieldElement;
 use rand::distributions::*;
 pub use ndarray::prelude::*;
 use ndarray_rand::RandomExt;
+use crate::transmission::TransmissionData;
 pub struct Encoded {
     random_matrix: Array1<FieldElement<i128>>,
     value: FieldElement<i128>,
@@ -22,8 +23,8 @@ impl Encoded {
         return self.value.clone();
     }
     pub fn to_transmission_data(&self) -> TransmissionData {
-        let random_matrix = self.random_matrix.iter().map(|x| x.num as u32).collect();
-        let data = self.value.prime as u32;
+        let random_matrix = self.random_matrix.iter().map(|x| x.num as u8).collect();
+        let data = self.value.num as u64;
         return TransmissionData { data, random_matrix , prime: self.value.prime };
     }
 }
@@ -36,10 +37,3 @@ pub fn encoding(sample: &Array1<FieldElement<i128>>, prime: i128) -> Encoded {
     return Encoded::new(random_matrix, sample, prime);
 }
 
-#[derive(Debug)]
-#[allow(dead_code)]
-pub struct TransmissionData {
-    data: u32,
-    random_matrix: Vec<u32>,
-    prime: i128,
-}

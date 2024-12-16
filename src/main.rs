@@ -4,7 +4,7 @@ use ndarray::prelude::*;
 //use ndarray_rand::RandomExt;
 mod encoder;
 mod decoder;
-
+pub mod transmission;
 use std::fmt::Debug;
 use std::ops::Sub;
 
@@ -74,9 +74,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     //エンコード
     for _ in 0..sample.len() {
         let encoded = encoder::encoding(&sample, prime);
-        random_matrix_tmp.push(encoded.get_random_matrix().to_vec());
-        sum_matrix.push(encoded.get_value());
-        println!("Transmitted sample: {:?}", encoded.to_transmission_data());
+        let transmission_data = encoded.to_transmission_data();
+        //let encoded = transmission_data.to_encoded();
+        random_matrix_tmp.push(transmission_data.get_random_matrix());
+        sum_matrix.push(transmission_data.to_value());
+        println!("Transmitted sample: {:?}", transmission_data);
     }
 
     //デコード
