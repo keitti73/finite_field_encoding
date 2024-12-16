@@ -3,6 +3,11 @@ use rand::distributions::*;
 use ndarray::prelude::*;
 use ndarray_rand::RandomExt;
 
+struct Encoded {
+    random_matrix: Array1<FieldElement<i128>>,
+    value: FieldElement<i128>,
+}
+
 fn main() {
     let prime = (2_u32.pow(31) - 1) as i128;
     let mut sum_matrix: Vec<FieldElement<i128>> = Vec::new();
@@ -12,20 +17,23 @@ fn main() {
     //println!("Original sample: {:?}", sample);
 
     for _ in 0..5 {
-        let random_matrix: Array1<FieldElement<i128>> = Array::random(5, Uniform::new(0, 255)).mapv(|x| FieldElement::new(x, prime));
-        random_matrix_1.push(random_matrix.to_vec());
+        //let random_matrix: Array1<FieldElement<i128>> = Array::random(5, Uniform::new(0, 255)).mapv(|x| FieldElement::new(x, prime));
+        //random_matrix_1.push(random_matrix.to_vec());
 
         // 符号化
-        let encoded_sample = &sample * &random_matrix;
+        //let encoded_sample = &sample * &random_matrix;
 
         // 合計値を計算するクロージャ
-        let sum_closure = |arr: &Array1<FieldElement<i128>>| -> FieldElement<i128> {
-            arr.iter().fold(FieldElement::new(0, prime), |acc, x| acc + x.clone())
-        };
+        //let sum_closure = |arr: &Array1<FieldElement<i128>>| -> FieldElement<i128> {
+        //    arr.iter().fold(FieldElement::new(0, prime), |acc, x| acc + x.clone())
+        //};
 
         // 合計値を計算
-        let sum = sum_closure(&encoded_sample);
-        sum_matrix.push(sum)
+        //let sum = sum_closure(&encoded_sample);
+        //sum_matrix.push(sum)
+        let encoded = encoding(&sample, prime);
+        random_matrix_1.push(encoded.random_matrix.to_vec());
+        sum_matrix.push(encoded.value);
     }
 
     let sum_matrix = Array::from(sum_matrix).to_owned();
@@ -76,3 +84,14 @@ fn gaussian_elimination(a: &Array2<FieldElement<i128>>, b: &Array1<FieldElement<
     x
 }
 
+fn encoding(sample: &Array1<FieldElement<i128>>, prime: i128) -> Encoded {
+    let prime = prime.clone();
+    let sample = sample.clone();
+    let random_matrix: Array1<FieldElement<i128>> = Array::random(5, Uniform::new(0, 255)).mapv(|x| FieldElement::new(x, prime));
+    let encoded_sample = &sample * &random_matrix;
+    let sum_closure = |arr: &Array1<FieldElement<i128>>| -> FieldElement<i128> {
+        arr.iter().fold(FieldElement::new(0, prime), |acc, x| acc + x.clone())
+    };
+    let sum = sum_closure(&encoded_sample);
+    return Encoded{random_matrix, value:sum};
+}
