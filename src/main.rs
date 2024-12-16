@@ -71,11 +71,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut random_matrix_tmp: Vec<Vec<FieldElement<i128>>> = Vec::new();
     //println!("Original sample: {:?}", sample);
 
-    //エンコード
     for _ in 0..sample.len() {
-        let encoded = encoder::encoding(&sample, prime);
-        let transmission_data = encoded.to_transmission_data();
+        let encoded = encoder::encoding(&sample, prime); //エンコード
+        let transmission_data = encoded.to_transmission_data(); //送信形式に変換
         //let encoded = transmission_data.to_encoded();
+
+        //送信形式からデコードするための係数行列を取得
         random_matrix_tmp.push(transmission_data.get_random_matrix());
         sum_matrix.push(transmission_data.to_value());
         println!("Transmitted sample: {:?}", transmission_data);
