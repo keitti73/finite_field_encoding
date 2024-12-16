@@ -8,6 +8,10 @@ mod decoder;
 use std::fmt::Debug;
 use std::ops::Sub;
 
+use std::fs::File;
+use std::io::Read;
+use std::mem;
+
 struct Sample<T>{
     value: Vec<T>,
     prime: T,
@@ -38,7 +42,21 @@ where
 
 
 fn main() {
-    let sample_data: Sample<u32> = Sample::<u32>::random_sample();
+    let mut file = File::open("./src/main.rs").unwrap();
+    let mut buf: Vec<u8> = Vec::new();
+    let _ = file.read_to_end(&mut buf);
+
+    let u32_buf: Vec<u32> = buf.chunks_exact(4)
+        .map(|chunk| {
+            let mut array = [0u8; 4];
+            array.copy_from_slice(chunk);
+            u32::from_le_bytes(array)
+        })
+        .collect();
+
+    println!("{:?}", u32_buf);
+
+    let sample_data: Sample<u32> = Sample { value: u32_buf, prime:  2_u32.pow(31) - 1 };
 
     let prime: i128 = sample_data.get_prime();
     let sample: Array1<FieldElement<i128>> = sample_data.get_value().into();
