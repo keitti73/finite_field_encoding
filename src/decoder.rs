@@ -1,7 +1,7 @@
 pub use field_element::FieldElement;
-pub use rand::distributions::*;
+//pub use rand::distributions::*;
 pub use ndarray::prelude::*;
-pub use ndarray_rand::RandomExt;
+//pub use ndarray_rand::RandomExt;
 
 pub fn decoding(sum_matrix:&Vec<FieldElement<i128>>,random_matrix_tmp:&Vec<Vec<FieldElement<i128>>>) -> Array1<FieldElement<i128>> {
     let sum_matrix = sum_matrix.clone();
