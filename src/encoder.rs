@@ -21,6 +21,11 @@ impl Encoded {
     pub fn get_value(&self) -> FieldElement<i128> {
         return self.value.clone();
     }
+    pub fn to_transmission_data(&self) -> TransmissionData {
+        let random_matrix = self.random_matrix.iter().map(|x| x.num as u32).collect();
+        let data = self.value.prime as u32;
+        return TransmissionData { data, random_matrix , prime: self.value.prime };
+    }
 }
 
 pub fn encoding(sample: &Array1<FieldElement<i128>>, prime: i128) -> Encoded {
@@ -29,4 +34,12 @@ pub fn encoding(sample: &Array1<FieldElement<i128>>, prime: i128) -> Encoded {
     let sample = sample.clone();
     let random_matrix: Array1<FieldElement<i128>> = Array::random(sample_sahpe, Uniform::new(0, 255)).mapv(|x| FieldElement::new(x, prime));
     return Encoded::new(random_matrix, sample, prime);
+}
+
+#[derive(Debug)]
+#[allow(dead_code)]
+pub struct TransmissionData {
+    data: u32,
+    random_matrix: Vec<u32>,
+    prime: i128,
 }

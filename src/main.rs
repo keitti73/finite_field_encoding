@@ -43,6 +43,7 @@ where
 
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
+    //ファイルを読み込んでVec<u32>に変換
     let mut file = File::open("./src/main.rs")?;
     let mut buf: Vec<u8> = Vec::new();
     let _ = file.read_to_end(&mut buf)?;
@@ -57,30 +58,35 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     //println!("{:?}", u32_buf);
 
-    let sample_data: Sample<u32,u32> = Sample { value: u32_buf.clone(), prime:  2_u32.pow(31) - 1 };
+    //サンプルデータを作成
+    let sample_data: Sample<u32,u64> = Sample { value: u32_buf.clone(), prime:  2_u64.pow(61) - 1 };
 
+    //サンプルデータからprimeを取得
     let prime: i128 = sample_data.get_prime();
+    //サンプルデータからFieldElementの配列を取得
     let sample: Array1<FieldElement<i128>> = sample_data.to_value().into();
 
+    //エンコードデータと係数行列を入れるための配列を用意
     let mut sum_matrix: Vec<FieldElement<i128>> = Vec::new();
     let mut random_matrix_tmp: Vec<Vec<FieldElement<i128>>> = Vec::new();
     //println!("Original sample: {:?}", sample);
 
+    //エンコード
     for _ in 0..sample.len() {
         let encoded = encoder::encoding(&sample, prime);
         random_matrix_tmp.push(encoded.get_random_matrix().to_vec());
         sum_matrix.push(encoded.get_value());
+        println!("Transmitted sample: {:?}", encoded.to_transmission_data());
     }
 
+    //デコード
     let x_vec = decoder::decoding(&sum_matrix, &random_matrix_tmp, &sample.len());
 
-    println!("{:?}", sample==x_vec);
-    println!("{:?}", sample.len());
-
-
+    //デコード結果を表示
     let x_vec_u32: Vec<u32> = x_vec.into_iter().map(|x| x.num as u32).collect();
-    println!("{}", u32_buf == x_vec_u32);
+    println!("デコード結果 (t/f) :{}", u32_buf == x_vec_u32);
 
+    //デコード結果をファイルに書き込む
     let mut file = File::create("out.rs")?;
     for num in x_vec_u32 {
         file.write_all(&num.to_le_bytes())?;
