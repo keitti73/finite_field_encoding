@@ -1,7 +1,7 @@
 pub use field_element::FieldElement;
-pub use rand::distributions::*;
+use rand::distributions::*;
 pub use ndarray::prelude::*;
-pub use ndarray_rand::RandomExt;
+use ndarray_rand::RandomExt;
 pub struct Encoded {
     random_matrix: Array1<FieldElement<i128>>,
     value: FieldElement<i128>,
