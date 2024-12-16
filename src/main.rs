@@ -1,7 +1,7 @@
-pub use field_element::FieldElement;
-pub use rand::distributions::*;
-pub use ndarray::prelude::*;
-pub use ndarray_rand::RandomExt;
+use field_element::FieldElement;
+use rand::distributions::*;
+use ndarray::prelude::*;
+use ndarray_rand::RandomExt;
 mod encoder;
 mod decoder;
 
