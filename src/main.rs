@@ -10,7 +10,6 @@ use std::ops::Sub;
 
 use std::fs::File;
 use std::io::Read;
-use std::mem;
 
 struct Sample<T>{
     value: Vec<T>,
@@ -54,7 +53,7 @@ fn main() {
         })
         .collect();
 
-    println!("{:?}", u32_buf);
+    //println!("{:?}", u32_buf);
 
     let sample_data: Sample<u32> = Sample { value: u32_buf, prime:  2_u32.pow(31) - 1 };
 
