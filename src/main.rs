@@ -2,8 +2,8 @@ pub use field_element::FieldElement;
 pub use rand::distributions::*;
 pub use ndarray::prelude::*;
 pub use ndarray_rand::RandomExt;
-pub mod encoder;
-pub mod decoder;
+mod encoder;
+mod decoder;
 
 
 fn main() {
