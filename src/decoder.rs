@@ -1,14 +1,16 @@
 pub use field_element::FieldElement;
 //pub use rand::distributions::*;
 pub use ndarray::prelude::*;
+//use ndarray::Shape;
 //pub use ndarray_rand::RandomExt;
 
-pub fn decoding(sum_matrix:&Vec<FieldElement<i128>>,random_matrix_tmp:&Vec<Vec<FieldElement<i128>>>) -> Array1<FieldElement<i128>> {
+pub fn decoding(sum_matrix:&Vec<FieldElement<i128>>,random_matrix_tmp:&Vec<Vec<FieldElement<i128>>>,shape:&usize) -> Array1<FieldElement<i128>> {
     let sum_matrix = sum_matrix.clone();
     let random_matrix_tmp = random_matrix_tmp.clone();
+    let shape = shape.clone();
 
     let sum_matrix = Array::from(sum_matrix).to_owned();
-    let random_matrix: Array2<FieldElement<i128>> = Array2::from_shape_vec((5, 5), random_matrix_tmp.iter().flatten().cloned().collect()).unwrap();
+    let random_matrix: Array2<FieldElement<i128>> = Array2::from_shape_vec((shape, shape), random_matrix_tmp.iter().flatten().cloned().collect()).unwrap();
     //println!("Random matrix: {:?}", random_matrix);
     let x_vec = gaussian_elimination(&random_matrix, &sum_matrix);
     //println!("Decoded sample: {:?}", x_vec);
