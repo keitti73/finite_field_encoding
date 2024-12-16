@@ -11,7 +11,7 @@ struct Encoded {
 fn main() {
     let prime = (2_u32.pow(31) - 1) as i128;
     let mut sum_matrix: Vec<FieldElement<i128>> = Vec::new();
-    let mut random_matrix_1: Vec<Vec<FieldElement<i128>>> = Vec::new();
+    let mut random_matrix_tmp: Vec<Vec<FieldElement<i128>>> = Vec::new();
     // ランダムなサンプルデータを生成
     let sample: Array1<FieldElement<i128>> = Array::random(5, Uniform::new(0, prime - 1)).mapv(|x| FieldElement::new(x, prime));
     //println!("Original sample: {:?}", sample);
@@ -32,15 +32,17 @@ fn main() {
         //let sum = sum_closure(&encoded_sample);
         //sum_matrix.push(sum)
         let encoded = encoding(&sample, prime);
-        random_matrix_1.push(encoded.random_matrix.to_vec());
+        random_matrix_tmp.push(encoded.random_matrix.to_vec());
         sum_matrix.push(encoded.value);
     }
 
-    let sum_matrix = Array::from(sum_matrix).to_owned();
-    let random_matrix: Array2<FieldElement<i128>> = Array2::from_shape_vec((5, 5), random_matrix_1.iter().flatten().cloned().collect()).unwrap();
+    //let sum_matrix = Array::from(sum_matrix).to_owned();
+    //let random_matrix: Array2<FieldElement<i128>> = Array2::from_shape_vec((5, 5), random_matrix_tmp.iter().flatten().cloned().collect()).unwrap();
     //println!("Random matrix: {:?}", random_matrix);
-    let x_vec = gaussian_elimination(&random_matrix, &sum_matrix);
+    //let x_vec = gaussian_elimination(&random_matrix, &sum_matrix);
     //println!("Decoded sample: {:?}", x_vec);
+
+    let x_vec = decoding(&sum_matrix, &random_matrix_tmp);
 
     println!("{:?}", sample==x_vec);
 }
@@ -94,4 +96,16 @@ fn encoding(sample: &Array1<FieldElement<i128>>, prime: i128) -> Encoded {
     };
     let sum = sum_closure(&encoded_sample);
     return Encoded{random_matrix, value:sum};
+}
+
+fn decoding(sum_matrix:&Vec<FieldElement<i128>>,random_matrix_tmp:&Vec<Vec<FieldElement<i128>>>) -> Array1<FieldElement<i128>> {
+    let sum_matrix = sum_matrix.clone();
+    let random_matrix_tmp = random_matrix_tmp.clone();
+
+    let sum_matrix = Array::from(sum_matrix).to_owned();
+    let random_matrix: Array2<FieldElement<i128>> = Array2::from_shape_vec((5, 5), random_matrix_tmp.iter().flatten().cloned().collect()).unwrap();
+    //println!("Random matrix: {:?}", random_matrix);
+    let x_vec = gaussian_elimination(&random_matrix, &sum_matrix);
+    //println!("Decoded sample: {:?}", x_vec);
+    return x_vec;
 }
