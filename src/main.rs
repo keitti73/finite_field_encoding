@@ -14,7 +14,7 @@ fn main() {
     let sample: Array1<FieldElement<i128>> = Array::random(5, Uniform::new(0, prime - 1)).mapv(|x| FieldElement::new(x, prime));
     //println!("Original sample: {:?}", sample);
 
-    for _ in 0..5 {
+    for _ in 0..sample.len() {
         //let random_matrix: Array1<FieldElement<i128>> = Array::random(5, Uniform::new(0, 255)).mapv(|x| FieldElement::new(x, prime));
         //random_matrix_1.push(random_matrix.to_vec());
 
