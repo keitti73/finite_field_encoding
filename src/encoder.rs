@@ -28,10 +28,5 @@ pub fn encoding(sample: &Array1<FieldElement<i128>>, prime: i128) -> Encoded {
     let sample_sahpe = sample.len();
     let sample = sample.clone();
     let random_matrix: Array1<FieldElement<i128>> = Array::random(sample_sahpe, Uniform::new(0, 255)).mapv(|x| FieldElement::new(x, prime));
-    //let encoded_sample = &sample * &random_matrix;
-    //let sum_closure = |arr: &Array1<FieldElement<i128>>| -> FieldElement<i128> {
-    //    arr.iter().fold(FieldElement::new(0, prime), |acc, x| acc + x.clone())
-    //};
-    //let sum = sum_closure(&encoded_sample);
     return Encoded::new(random_matrix, sample, prime);
 }
