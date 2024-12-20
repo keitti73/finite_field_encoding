@@ -25,7 +25,7 @@ impl Encoded {
     pub fn to_transmission_data(&self) -> TransmissionData {
         let random_matrix = self.random_matrix.iter().map(|x| x.num as u8).collect();
         let data = self.value.num as u64;
-        return TransmissionData { data, random_matrix , prime: self.value.prime };
+        return TransmissionData { data, random_matrix , prime: self.value.prime as u64};
     }
 }
 

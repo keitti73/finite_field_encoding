@@ -6,3 +6,5 @@ out.rs
 
 # テスト用ファイルを無視する
 test.txt
+
+/data
