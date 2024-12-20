@@ -79,7 +79,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         //送信形式からデコードするための係数行列を取得
         random_matrix_tmp.push(transmission_data.get_random_matrix());
         sum_matrix.push(transmission_data.to_value());
-        println!("Transmitted sample: {:?}", transmission_data);
+        println!("{:?}", transmission_data);
     }
 
     //デコード
